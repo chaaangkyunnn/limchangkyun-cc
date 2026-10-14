@@ -3,5 +3,8 @@
   "trailingSlash": false,
   "redirects": [
     { "source": "/", "destination": "/cc", "permanent": false }
+  ],
+  "rewrites": [
+    { "source": "/cc", "destination": "/index.html" }
   ]
 }
