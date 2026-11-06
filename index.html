@@ -304,11 +304,8 @@ a{ color:var(--accent); text-underline-offset:3px; }
 .map-lightbox{
   position:fixed; inset:0;
   z-index:100;
-  display:grid; place-items:center;
-  padding:
-    calc(env(safe-area-inset-top, 0px) + 60px)
-    16px
-    calc(env(safe-area-inset-bottom, 0px) + 24px);
+  display:flex; align-items:center; justify-content:center;
+  padding:0;
 }
 .map-lightbox[hidden]{ display:none !important; }
 .map-lightbox-backdrop{
@@ -323,8 +320,10 @@ a{ color:var(--accent); text-underline-offset:3px; }
 .map-lightbox-img{
   position:relative;
   display:block;
-  max-width:100%;
-  max-height:100%;
+  /* 화면 정중앙 · 위아래 최소 48px, 좌우 최소 16px 여백 */
+  max-width:calc(100vw - 32px);
+  max-height:calc(100vh - 96px);
+  max-height:calc(100dvh - 96px);
   width:auto; height:auto;
   border-radius:10px;
   box-shadow:0 30px 60px rgba(0,0,0,.4);
@@ -335,7 +334,11 @@ a{ color:var(--accent); text-underline-offset:3px; }
 }
 /* 큰 화면에서는 화면의 91% 크기로 */
 @media (min-width: 768px){
-  .map-lightbox-img{ max-width:min(100%, 91vw); max-height:min(100%, 91vh); }
+  .map-lightbox-img{
+    max-width:min(91vw, calc(100vw - 32px));
+    max-height:min(91vh, calc(100vh - 96px));
+    max-height:min(91dvh, calc(100dvh - 96px));
+  }
 }
 .map-lightbox.is-open .map-lightbox-backdrop{ opacity:1; }
 .map-lightbox.is-open .map-lightbox-img{ opacity:1; transform:none; }
