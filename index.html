@@ -278,6 +278,82 @@ a{ color:var(--accent); text-underline-offset:3px; }
 .graph-figure img{ display:block; width:100%; height:auto; }
 .map-figure img{ border-radius:12px; }
 
+/* 지도 — 누르면 팝업으로 크게 보기 */
+.map-trigger{
+  position:relative;
+  display:block; width:100%;
+  padding:0; border:0; background:none;
+  border-radius:12px;
+  cursor:zoom-in;
+}
+.map-trigger img{ transition:filter .2s ease; }
+.map-trigger:hover img{ filter:brightness(.92); }
+.map-trigger:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
+.map-zoom-badge{
+  position:absolute; right:12px; bottom:12px;
+  width:34px; height:34px;
+  display:grid; place-items:center;
+  border-radius:50%;
+  background:rgba(22, 20, 17, .62);
+  color:#fff;
+  -webkit-backdrop-filter:blur(4px);
+  backdrop-filter:blur(4px);
+  pointer-events:none;
+}
+
+.map-lightbox{
+  position:fixed; inset:0;
+  z-index:100;
+  display:grid; place-items:center;
+  padding:
+    calc(env(safe-area-inset-top, 0px) + 60px)
+    16px
+    calc(env(safe-area-inset-bottom, 0px) + 24px);
+}
+.map-lightbox[hidden]{ display:none !important; }
+.map-lightbox-backdrop{
+  position:absolute; inset:0;
+  background:rgba(22, 20, 17, .82);
+  -webkit-backdrop-filter:blur(6px);
+  backdrop-filter:blur(6px);
+  opacity:0;
+  transition:opacity .3s ease;
+  cursor:zoom-out;
+}
+.map-lightbox-img{
+  position:relative;
+  display:block;
+  max-width:100%;
+  max-height:100%;
+  width:auto; height:auto;
+  border-radius:10px;
+  box-shadow:0 30px 60px rgba(0,0,0,.4);
+  opacity:0;
+  transform:scale(.96);
+  transition:opacity .3s ease, transform .3s ease;
+  cursor:zoom-out;
+}
+.map-lightbox.is-open .map-lightbox-backdrop{ opacity:1; }
+.map-lightbox.is-open .map-lightbox-img{ opacity:1; transform:none; }
+.map-lightbox-close{
+  position:fixed;
+  top:calc(env(safe-area-inset-top, 0px) + 12px);
+  right:14px;
+  z-index:2;
+  width:40px; height:40px;
+  display:grid; place-items:center;
+  border:0; border-radius:50%;
+  background:rgba(255,255,255,.14);
+  color:#fff;
+  cursor:pointer;
+}
+.map-lightbox-close:hover{ background:rgba(255,255,255,.24); }
+.map-lightbox-close:focus-visible{ outline:2px solid #fff; outline-offset:2px; }
+body.is-map-open{ overflow:hidden; }
+@media (prefers-reduced-motion: reduce){
+  .map-lightbox-backdrop, .map-lightbox-img{ transition:none; }
+}
+
 /* 자문자답 — 인터뷰 아티클
    ✏️ 문답을 추가하려면 <div class="qna-item"> 한 덩어리를 복사하세요. */
 .qna{
@@ -731,10 +807,16 @@ footer{
         <span class="week-no">WEEK 09</span>
         <span class="pill">MAP</span>
       </div>
+      <p>이미지를 누르면 크게 볼 수 있습니다.</p>
       <figure class="graph-figure map-figure">
-        <img src="images/map/arsenal-map.webp"
-             alt="런던 에미레이츠 스타디움 일대 위성 지도 위에 여행 중 찍은 사진들이 위치별로 표시된 모습"
-             width="2400" height="1551" loading="lazy" decoding="async">
+        <button type="button" class="map-trigger" id="map-trigger" aria-haspopup="dialog" aria-label="지도 이미지 크게 보기">
+          <img src="images/map/arsenal-map.webp"
+               alt="런던 에미레이츠 스타디움 일대 위성 지도 위에 여행 중 찍은 사진들이 위치별로 표시된 모습"
+               width="2400" height="1551" loading="lazy" decoding="async">
+          <span class="map-zoom-badge" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </button>
       </figure>
     </div>
 
@@ -1394,6 +1476,17 @@ body.is-reading{ overflow:hidden; }
   .book-hint-dot{ animation:none; }
 }
 </style>
+
+<!-- ══════════════════════════════════════════════════════════
+     지도 팝업 — 지도 탭의 이미지를 누르면 크게 열립니다
+     ══════════════════════════════════════════════════════════ -->
+<div class="map-lightbox" id="map-lightbox" role="dialog" aria-modal="true" aria-label="지도 크게 보기" hidden>
+  <div class="map-lightbox-backdrop" data-close></div>
+  <button type="button" class="map-lightbox-close" data-close aria-label="닫기">
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+  </button>
+  <img class="map-lightbox-img" data-close src="images/map/arsenal-map.webp" alt="런던 에미레이츠 스타디움 일대 위성 지도 위에 여행 중 찍은 사진들이 위치별로 표시된 모습" width="2400" height="1551" decoding="async">
+</div>
 
 <!-- ══════════════════════════════════════════════════════════
      단편소설 리더 — 책을 누르면 열리는 종이 펼침면
@@ -3387,6 +3480,52 @@ void main() {
     wave: 1,
     fadeEdges: 0.12,
     shadow: 0.22
+  });
+})();
+</script>
+
+<script>
+/* 지도 팝업 — 열기 · 닫기(배경 클릭, ✕, Esc) */
+(function () {
+  var trigger = document.getElementById("map-trigger");
+  var box = document.getElementById("map-lightbox");
+  if (!trigger || !box) return;
+  var closeBtn = box.querySelector(".map-lightbox-close");
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var isOpen = false;
+
+  function open() {
+    if (isOpen) return;
+    isOpen = true;
+    box.hidden = false;
+    document.body.classList.add("is-map-open");
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        box.classList.add("is-open");
+        closeBtn.focus({ preventScroll: true });
+      });
+    });
+  }
+
+  function close() {
+    if (!isOpen) return;
+    isOpen = false;
+    box.classList.remove("is-open");
+    setTimeout(function () {
+      box.hidden = true;
+      document.body.classList.remove("is-map-open");
+      trigger.focus({ preventScroll: true });
+    }, reduceMotion ? 0 : 300);
+  }
+
+  trigger.addEventListener("click", open);
+  box.addEventListener("click", function (e) {
+    if (e.target.closest("[data-close]")) close();
+  });
+  document.addEventListener("keydown", function (e) {
+    if (!isOpen) return;
+    if (e.key === "Escape") { e.preventDefault(); close(); }
+    else if (e.key === "Tab") { e.preventDefault(); closeBtn.focus(); }
   });
 })();
 </script>
