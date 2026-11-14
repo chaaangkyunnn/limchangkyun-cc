@@ -278,6 +278,27 @@ a{ color:var(--accent); text-underline-offset:3px; }
 .graph-figure img{ display:block; width:100%; height:auto; }
 .map-figure img{ border-radius:12px; }
 
+/* 애플리케이션 — 외부 사이트를 탭 안에 그대로 보여줍니다 */
+.app-open{
+  margin-left:auto;
+  font-family:var(--font-mono);
+  font-size:12px; color:var(--muted);
+  text-decoration:none;
+}
+.app-open:hover{ color:var(--accent); }
+.app-open:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; border-radius:4px; }
+.app-frame{
+  border:1px solid var(--line);
+  border-radius:12px;
+  overflow:hidden;
+  background:#fff;
+}
+.app-frame iframe{
+  display:block; width:100%;
+  height:clamp(520px, 82vh, 960px);
+  border:0;
+}
+
 /* 지도 — 누르면 팝업으로 크게 보기 */
 .map-trigger{
   position:relative;
@@ -610,7 +631,7 @@ footer{
        ══════════════════════════════════════════════════════════ -->
   <header class="masthead">
     <!-- ✏️ 사이트 제목 (좌상단 작은 글씨) -->
-    <p class="site-label">웹페이지 v.1.6.0</p>
+    <p class="site-label">웹페이지 v.1.7.0</p>
   </header>
 
 
@@ -633,7 +654,7 @@ footer{
         <button class="tab" role="tab" id="tab-w5"    aria-controls="panel-w5"    aria-selected="false" tabindex="-1">영상</button>
         <button class="tab" role="tab" id="tab-w6"    aria-controls="panel-w6"    aria-selected="false" tabindex="-1">이미지</button>
         <button class="tab" role="tab" id="tab-w7"    aria-controls="panel-w7"    aria-selected="false" tabindex="-1">지도</button>
-        <button class="tab" role="tab" id="tab-w8"    aria-controls="panel-w8"    aria-selected="false" tabindex="-1">8주차</button>
+        <button class="tab" role="tab" id="tab-w8"    aria-controls="panel-w8"    aria-selected="false" tabindex="-1">애플리케이션</button>
         <button class="tab" role="tab" id="tab-w9"    aria-controls="panel-w9"    aria-selected="false" tabindex="-1">9주차</button>
       </div>
     </div>
@@ -830,19 +851,19 @@ footer{
       </figure>
     </div>
 
-    <!-- ── 8주차 ────────────────────────────────────────────── -->
+    <!-- ── 애플리케이션 (8주차) ─────────────────────────────── -->
+    <!-- ✏️ 보여줄 사이트를 바꾸려면 아래 iframe 의 src 와 링크의 href 를 교체하세요 -->
     <div class="panel" role="tabpanel" id="panel-w8" aria-labelledby="tab-w8" tabindex="0" hidden>
       <div class="panel-meta">
         <span class="week-no">WEEK 08</span>
-        <span class="panel-date ph">0000.00.00 – 00.00</span>
-        <span class="pill">작성 전</span>
+        <span class="pill">APPLICATION</span>
+        <a class="app-open" href="https://chroma-scale-studio.minjincho20.chatgpt.site/?color=5E6AD2&amp;base=500&amp;chroma=100&amp;contrast=100" target="_blank" rel="noopener noreferrer">새 창에서 열기 ↗</a>
       </div>
-      <h3 class="ph">이번 주 제목을 적어주세요</h3>
-      <p class="ph">이번 주에 무엇을 했고 무엇이 기억에 남았는지 두세 문장으로 적습니다.</p>
-      <div class="panel-grid">
-        <div class="note"><h4>한 일</h4><ul><li class="ph">항목 1</li><li class="ph">항목 2</li><li class="ph">항목 3</li></ul></div>
-        <div class="note"><h4>배운 것</h4><ul><li class="ph">항목 1</li><li class="ph">항목 2</li></ul></div>
-        <div class="note"><h4>다음 주</h4><p class="ph">다음 주 계획 한 줄.</p></div>
+      <div class="app-frame">
+        <iframe src="https://chroma-scale-studio.minjincho20.chatgpt.site/?color=5E6AD2&amp;base=500&amp;chroma=100&amp;contrast=100"
+                title="Chroma Scale Studio 애플리케이션"
+                loading="lazy" allow="clipboard-write"
+                referrerpolicy="strict-origin-when-cross-origin"></iframe>
       </div>
     </div>
 
@@ -877,14 +898,30 @@ footer{
     <section class="changelog" aria-labelledby="changelog-title">
       <div class="changelog-head">
         <h2 id="changelog-title">버전 로그</h2>
-        <span class="changelog-sub">CURRENT — v.1.6.0</span>
+        <span class="changelog-sub">CURRENT — v.1.7.0</span>
       </div>
 
       <details class="ver" open>
         <summary>
           <span class="ver-caret" aria-hidden="true"></span>
-          <span class="ver-no">v.1.6.0</span>
+          <span class="ver-no">v.1.7.0</span>
           <span class="ver-date">현재</span>
+        </summary>
+        <div class="ver-body">
+          <div class="ver-group">
+            <h4>Added</h4>
+            <ul>
+              <li>애플리케이션 제작</li>
+            </ul>
+          </div>
+        </div>
+      </details>
+
+      <details class="ver">
+        <summary>
+          <span class="ver-caret" aria-hidden="true"></span>
+          <span class="ver-no">v.1.6.0</span>
+          <span class="ver-date">이전 버전</span>
         </summary>
         <div class="ver-body">
           <div class="ver-group">
@@ -1046,7 +1083,7 @@ footer{
       </ol>
     </details>
 
-    <footer>웹페이지 v.1.6.0 — 매주 업데이트</footer>
+    <footer>웹페이지 v.1.7.0 — 매주 업데이트</footer>
 
   </div>
 </div>
